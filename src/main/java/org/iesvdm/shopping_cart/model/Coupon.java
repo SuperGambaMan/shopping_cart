@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -17,7 +18,7 @@ public class Coupon {
     private String code;
     private String description;
     private String discountType;
-    private Double discountValue;
+    private BigDecimal discountValue;
     private Boolean active = true;
     private LocalDateTime validFrom;
     private LocalDateTime validTo;
