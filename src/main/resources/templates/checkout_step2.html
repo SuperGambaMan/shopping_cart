@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Step 2 of 3 - Billing and Shipping Addresses</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="container my-4">
+
+    <div th:if="${errorMessage != null}" class="mb-3">
+        <div class="alert alert-danger" th:text="${errorMessage}"></div>
+    </div>
+    <div th:if="${successMessage != null}" class="mb-3">
+        <div class="alert alert-success" th:text="${successMessage}"></div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2 class="mb-0">Step 2 of 3 - Billing and Shipping Addresses</h2>
+        </div>
+        <div class="card-body">
+
+            <form th:action="@{/checkout/step2}" th:object="${customerOrder}" method="post">
+                <input type="hidden" th:field="*{id}" />
+
+                <div class="mb-4">
+                    <h5>Billing address</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="billingName" class="form-label">Full name</label>
+                            <input type="text" id="billingName" th:field="*{billingName}" placeholder="Full name" class="form-control" />
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('billingName')}" th:errors="*{billingName}"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="billingTaxId" class="form-label">Tax ID / ID</label>
+                            <input type="text" id="billingTaxId" th:field="*{billingTaxId}" placeholder="Tax ID / ID" class="form-control" />
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('billingTaxId')}" th:errors="*{billingTaxId}"></div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="billingStreet" class="form-label">Street / Address</label>
+                            <input type="text" id="billingStreet" th:field="*{billingStreet}" placeholder="Street, number, floor, etc." class="form-control" />
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('billingStreet')}" th:errors="*{billingStreet}"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="billingCity" class="form-label">City</label>
+                            <input type="text" id="billingCity" th:field="*{billingCity}" placeholder="City" class="form-control" />
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('billingCity')}" th:errors="*{billingCity}"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="billingPostalCode" class="form-label">ZIP / Postal code</label>
+                            <input type="text" id="billingPostalCode" th:field="*{billingPostalCode}" placeholder="Postal code" class="form-control" />
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('billingPostalCode')}" th:errors="*{billingPostalCode}"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="billingCountry" class="form-label">Country</label>
+                            <input type="text" id="billingCountry" th:field="*{billingCountry}" placeholder="Country" class="form-control" />
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('billingCountry')}" th:errors="*{billingCountry}"></div>
+                        </div>
+
+                        <div class="col-12 form-check mt-2">
+                            <input class="form-check-input" type="checkbox" id="sameAsBilling" name="sameAsBilling">
+                            <label class="form-check-label" for="sameAsBilling">Use the same address for shipping</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h5>Shipping address</h5>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="shippingStreet" class="form-label">Street / Address</label>
+                            <input type="text" id="shippingStreet" th:field="*{shippingStreet}" placeholder="Street, number, floor, etc." class="form-control" />
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('shippingStreet')}" th:errors="*{shippingStreet}"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="shippingCity" class="form-label">City</label>
+                            <input type="text" id="shippingCity" th:field="*{shippingCity}" placeholder="City" class="form-control" />
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('shippingCity')}" th:errors="*{shippingCity}"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="shippingPostalCode" class="form-label">ZIP / Postal code</label>
+                            <input type="text" id="shippingPostalCode" th:field="*{shippingPostalCode}" placeholder="Postal code" class="form-control" />
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('shippingPostalCode')}" th:errors="*{shippingPostalCode}"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="shippingCountry" class="form-label">Country</label>
+                            <input type="text" id="shippingCountry" th:field="*{shippingCountry}" placeholder="Country" class="form-control" />
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('shippingCountry')}" th:errors="*{shippingCountry}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a class="btn btn-secondary" th:href="@{/cart}">« Back to cart</a>
+                    <button type="submit" class="btn btn-primary">Go to payment »</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+/* Custom styles for shopping cart app */
+body {
+  background-color: #f8f9fa;
+}
+
+.card-header h2 {
+  font-size: 1.25rem;
+}
+
+.table thead th {
+  border-bottom: 2px solid #dee2e6;
+}
+
+.alert {
+  margin-bottom: 0.5rem;
+}
+
+/* Make small error text a bit more visible */
+.text-danger.small {
+  font-size: 0.85rem;
+}
+

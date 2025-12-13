@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +26,24 @@ public class CustomerOrder {
     private String paymentMethod;
     private String paymentStatus;
     private String paymentDetails;
+
+    @NotBlank(message = "Billing full name is required")
     private String billingName;
+
     private String billingTaxId;
+
+    @NotBlank(message = "Billing street is required")
     private String billingStreet;
+
+    @NotBlank(message = "Billing city is required")
     private String billingCity;
+
+    @NotBlank(message = "Billing country is required")
     private String billingCountry;
+
+    @NotBlank(message = "Billing postal code is required")
+    private String billingPostalCode; // añadido
+
     private String shippingStreet;
     private String shippingCity;
     private String shippingPostalCode;
@@ -48,4 +62,3 @@ public class CustomerOrder {
     }
 
 }
-
