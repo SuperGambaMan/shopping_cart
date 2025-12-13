@@ -2,26 +2,137 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Order confirmation</title>
+    <title>Order Confirmation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
-<div th:if="${errorMessage != null}">
-    <div style="color:red; font-weight:bold;" th:text="${errorMessage}"></div>
-</div>
-<div th:if="${successMessage != null}">
-    <div style="color:green; font-weight:bold;" th:text="${successMessage}"></div>
-</div>
+<div class="container my-4">
 
-<h1>Order completed</h1>
-<div th:if="${order} != null">
-    <p>Thank you for your purchase!</p>
-    <p>Order number: <strong th:text="${order.orderNumber}">ORD-123</strong></p>
-    <p>Amount: <strong th:text="${order.finalTotal}">0.00</strong></p>
-    <p>Payment method: <strong th:text="${order.paymentMethod}">CARD</strong></p>
-    <p>Payment status: <strong th:text="${order.paymentStatus}">PAID</strong></p>
-    <p>Payment details: <span th:text="${order.paymentDetails}">details</span></p>
-    <p>A confirmation email has been sent to you.</p>
+    <div th:if="${errorMessage != null}" class="mb-3">
+        <div class="alert alert-danger" th:text="${errorMessage}"></div>
+    </div>
+    <div th:if="${successMessage != null}" class="mb-3">
+        <div class="alert alert-success" th:text="${successMessage}"></div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h2 class="mb-0">Order Completed</h2>
+        </div>
+        <div class="card-body">
+
+            <div th:if="${order} != null">
+                <div class="alert alert-success mb-4" role="alert">
+                    <h4 class="alert-heading">Thank you for your purchase!</h4>
+                    <p class="mb-0">Your order has been processed successfully.</p>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5>Order Details</h5>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <th scope="row" style="width: 40%;">Order number:</th>
+                                    <td><strong th:text="${order.orderNumber}">ORD-123</strong></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Amount:</th>
+                                    <td><strong th:text="${#numbers.formatDecimal(order.finalTotal, 1, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</strong></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Payment method:</th>
+                                    <td><span class="badge bg-info" th:text="${order.paymentMethod}">CARD</span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Payment status:</th>
+                                    <td>
+                                        <span class="badge"
+                                              th:classappend="${order.paymentStatus == 'PAID' ? 'bg-success' : 'bg-warning'}"
+                                              th:text="${order.paymentStatus}">PAID</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Payment details:</th>
+                                    <td th:text="${order.paymentDetails}">details</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h5>Billing Information</h5>
+                        <address>
+                            <strong th:text="${order.billingName}">Customer Name</strong><br>
+                            <span th:text="${order.billingStreet}">Street</span><br>
+                            <span th:text="${order.billingCity} + ', ' + ${order.billingPostalCode}">City, ZIP</span><br>
+                            <span th:text="${order.billingCountry}">Country</span>
+                        </address>
+
+                        <h5 class="mt-3">Shipping Information</h5>
+                        <address>
+                            <span th:text="${order.shippingStreet}">Street</span><br>
+                            <span th:text="${order.shippingCity} + ', ' + ${order.shippingPostalCode}">City, ZIP</span><br>
+                            <span th:text="${order.shippingCountry}">Country</span>
+                        </address>
+                    </div>
+                </div>
+
+                <div class="mb-4" th:if="${order.orderItems != null && !order.orderItems.isEmpty()}">
+                    <h5>Order Items</h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th class="text-end">Unit Price</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-end">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="item : ${order.orderItems}">
+                                    <td th:text="${item.productName}">Product</td>
+                                    <td class="text-end" th:text="${#numbers.formatDecimal(item.unitPrice, 1, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</td>
+                                    <td class="text-center" th:text="${item.quantity}">1</td>
+                                    <td class="text-end" th:text="${#numbers.formatDecimal(item.lineTotal, 1, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-end"><strong>Gross Total:</strong></td>
+                                    <td class="text-end"><strong th:text="${#numbers.formatDecimal(order.grossTotal, 1, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</strong></td>
+                                </tr>
+                                <tr th:if="${order.discountTotal != null && order.discountTotal > 0}">
+                                    <td colspan="3" class="text-end"><strong>Discount:</strong></td>
+                                    <td class="text-end text-success"><strong th:text="'-' + ${#numbers.formatDecimal(order.discountTotal, 1, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-end"><strong>Total Paid:</strong></td>
+                                    <td class="text-end"><strong class="fs-5 text-success" th:text="${#numbers.formatDecimal(order.finalTotal, 1, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="alert alert-info" role="alert">
+                    <i class="bi bi-envelope"></i> A confirmation email has been sent to you.
+                </div>
+            </div>
+
+            <div th:if="${order} == null" class="alert alert-warning">
+                <p>Order information not available.</p>
+            </div>
+
+            <div class="text-center mt-4">
+                <a th:href="@{/cart}" class="btn btn-primary btn-lg">Back to Cart</a>
+            </div>
+
+        </div>
+    </div>
+
 </div>
-<p><a th:href="@{/cart}">Back to cart</a></p>
 </body>
 </html>

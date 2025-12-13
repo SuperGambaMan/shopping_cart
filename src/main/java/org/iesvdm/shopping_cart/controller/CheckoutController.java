@@ -1,6 +1,7 @@
 package org.iesvdm.shopping_cart.controller;
 
 import org.iesvdm.shopping_cart.dto.PaymentDTO;
+import org.iesvdm.shopping_cart.model.Cart;
 import org.iesvdm.shopping_cart.model.CustomerOrder;
 import org.iesvdm.shopping_cart.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -78,27 +80,40 @@ public class CheckoutController {
 
     // Procesar el formulario del paso 3 (pago)
     @PostMapping("/checkout/step3")
-    public String processStep3(@Valid @ModelAttribute("paymentDTO") PaymentDTO paymentDTO, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
+    public String processStep3(@Valid @ModelAttribute("paymentDTO") PaymentDTO paymentDTO, BindingResult bindingResult, @ModelAttribute("cart") Cart cart, Model model, RedirectAttributes redirectAttributes, HttpSession session){
         // Load order for context
         CustomerOrder order = orderRepository.findById(paymentDTO.getId());
         model.addAttribute("order", order);
 
-        // Conditional validation: if CARD selected, require card fields, etc.
+        // Conditional validation based on payment method
         if ("CARD".equals(paymentDTO.getPaymentMethod())){
+            // Validate card fields presence
             if (paymentDTO.getCardNumber() == null || paymentDTO.getCardNumber().isBlank()){
                 bindingResult.rejectValue("cardNumber", "NotBlank", "Card number is required");
+            } else if (!paymentDTO.getCardNumber().matches("^\\d{13,19}$")){
+                bindingResult.rejectValue("cardNumber", "Pattern", "Card number must be 13 to 19 digits");
             }
+
             if (paymentDTO.getExpiry() == null || paymentDTO.getExpiry().isBlank()){
                 bindingResult.rejectValue("expiry", "NotBlank", "Expiry is required");
+            } else if (!paymentDTO.getExpiry().matches("^(0[1-9]|1[0-2])/(\\d{2})$")){
+                bindingResult.rejectValue("expiry", "Pattern", "Expiry must be in MM/YY format");
             }
+
             if (paymentDTO.getCvv() == null || paymentDTO.getCvv().isBlank()){
                 bindingResult.rejectValue("cvv", "NotBlank", "CVV is required");
+            } else if (!paymentDTO.getCvv().matches("^\\d{3,4}$")){
+                bindingResult.rejectValue("cvv", "Pattern", "CVV must be 3 or 4 digits");
             }
         } else if ("PAYPAL".equals(paymentDTO.getPaymentMethod())){
+            // Validate PayPal email
             if (paymentDTO.getPaypalEmail() == null || paymentDTO.getPaypalEmail().isBlank()){
                 bindingResult.rejectValue("paypalEmail", "NotBlank", "PayPal email is required");
+            } else if (!paymentDTO.getPaypalEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")){
+                bindingResult.rejectValue("paypalEmail", "Email", "Please enter a valid email address");
             }
         }
+        // BANK does not require extra fields
 
         if (bindingResult.hasErrors()){
             // return view with errors
@@ -127,9 +142,25 @@ public class CheckoutController {
 
         // Guardar en BD
         orderRepository.updatePayment(order);
+
+        // AHORA SÍ limpiamos el carrito después del pago exitoso
+        cart.getItems().clear();
+        cart.clearCoupon();
+
+        // Eliminar el carrito de la sesión directamente
+        session.removeAttribute("cart");
+
         redirectAttributes.addFlashAttribute("successMessage", "Payment processed successfully");
 
         // Redirigir a página final de confirmación con resumen
         return "redirect:/order/confirmation?orderId=" + order.getId();
+    }
+
+    // Mostrar página de confirmación
+    @GetMapping("/order/confirmation")
+    public String showConfirmation(@RequestParam Long orderId, Model model){
+        CustomerOrder order = orderRepository.findById(orderId);
+        model.addAttribute("order", order);
+        return "order_confirmation";
     }
 }

@@ -22,7 +22,7 @@ public class OrderRepository {
     JdbcTemplate jdbcTemplate;
 
     public Long insertOrder(CustomerOrder order){
-        String sql = "INSERT INTO customer_order (order_number, created_at, status, gross_total, discount_total, final_total, payment_method, payment_status, payment_details, billing_name, billing_tax_id, billing_street, billing_city, billing_country, shipping_street, shipping_city, shipping_postal_code, shipping_country, coupon_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO customer_order (order_number, created_at, status, gross_total, discount_total, final_total, payment_method, payment_status, payment_details, billing_name, billing_tax_id, billing_street, billing_city, billing_postal_code, billing_country, shipping_street, shipping_city, shipping_postal_code, shipping_country, coupon_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -39,15 +39,16 @@ public class OrderRepository {
             ps.setString(11, order.getBillingTaxId());
             ps.setString(12, order.getBillingStreet());
             ps.setString(13, order.getBillingCity());
-            ps.setString(14, order.getBillingCountry());
-            ps.setString(15, order.getShippingStreet());
-            ps.setString(16, order.getShippingCity());
-            ps.setString(17, order.getShippingPostalCode());
-            ps.setString(18, order.getShippingCountry());
+            ps.setString(14, order.getBillingPostalCode());
+            ps.setString(15, order.getBillingCountry());
+            ps.setString(16, order.getShippingStreet());
+            ps.setString(17, order.getShippingCity());
+            ps.setString(18, order.getShippingPostalCode());
+            ps.setString(19, order.getShippingCountry());
             if (order.getCoupon() != null && order.getCoupon().getId() != null){
-                ps.setLong(19, order.getCoupon().getId());
+                ps.setLong(20, order.getCoupon().getId());
             } else {
-                ps.setNull(19, java.sql.Types.BIGINT);
+                ps.setNull(20, java.sql.Types.BIGINT);
             }
             return ps;
         }, keyHolder);
@@ -70,8 +71,8 @@ public class OrderRepository {
 
     // Nuevo: obtener Order por id
     public CustomerOrder findById(Long id){
-        String sql = "SELECT id, order_number, created_at, status, gross_total, discount_total, final_total, payment_method, payment_status, payment_details, billing_name, billing_tax_id, billing_street, billing_city, billing_country, shipping_street, shipping_city, shipping_postal_code, shipping_country, coupon_id FROM customer_order WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new RowMapper<CustomerOrder>(){
+        String sql = "SELECT id, order_number, created_at, status, gross_total, discount_total, final_total, payment_method, payment_status, payment_details, billing_name, billing_tax_id, billing_street, billing_city, billing_country, billing_postal_code, shipping_street, shipping_city, shipping_postal_code, shipping_country, coupon_id FROM customer_order WHERE id = ?";
+        CustomerOrder order = jdbcTemplate.queryForObject(sql, new Object[]{id}, new RowMapper<CustomerOrder>(){
             @Override
             public CustomerOrder mapRow(ResultSet rs, int rowNum) throws SQLException {
                 CustomerOrder o = new CustomerOrder();
@@ -89,6 +90,7 @@ public class OrderRepository {
                 o.setBillingTaxId(rs.getString("billing_tax_id"));
                 o.setBillingStreet(rs.getString("billing_street"));
                 o.setBillingCity(rs.getString("billing_city"));
+                o.setBillingPostalCode(rs.getString("billing_postal_code"));
                 o.setBillingCountry(rs.getString("billing_country"));
                 o.setShippingStreet(rs.getString("shipping_street"));
                 o.setShippingCity(rs.getString("shipping_city"));
@@ -103,16 +105,42 @@ public class OrderRepository {
                 return o;
             }
         });
+
+        // Load order items
+        if (order != null) {
+            order.setOrderItems(findOrderItemsByOrderId(id));
+        }
+
+        return order;
+    }
+
+    // Helper method to load order items
+    private java.util.List<org.iesvdm.shopping_cart.model.OrderItem> findOrderItemsByOrderId(Long orderId){
+        String sql = "SELECT id, order_id, product_id, product_name, unit_price, quantity, line_total FROM order_item WHERE order_id = ?";
+        return jdbcTemplate.query(sql, new Object[]{orderId}, (rs, rowNum) -> {
+            org.iesvdm.shopping_cart.model.OrderItem item = new org.iesvdm.shopping_cart.model.OrderItem();
+            item.setId(rs.getLong("id"));
+            // Create a simple Product object with just the ID
+            org.iesvdm.shopping_cart.model.Product product = new org.iesvdm.shopping_cart.model.Product();
+            product.setId(rs.getLong("product_id"));
+            item.setProduct(product);
+            item.setProductName(rs.getString("product_name"));
+            item.setUnitPrice(rs.getDouble("unit_price"));
+            item.setQuantity(rs.getInt("quantity"));
+            // lineTotal is calculated automatically in getLineTotal()
+            return item;
+        });
     }
 
     // Nuevo: actualizar campos de billing/shipping para una orden
     public void updateOrder(CustomerOrder order){
-        String sql = "UPDATE customer_order SET billing_name=?, billing_tax_id=?, billing_street=?, billing_city=?, billing_country=?, shipping_street=?, shipping_city=?, shipping_postal_code=?, shipping_country=? WHERE id = ?";
+        String sql = "UPDATE customer_order SET billing_name=?, billing_tax_id=?, billing_street=?, billing_city=?, billing_postal_code=?, billing_country=?, shipping_street=?, shipping_city=?, shipping_postal_code=?, shipping_country=? WHERE id = ?";
         jdbcTemplate.update(sql,
                 order.getBillingName(),
                 order.getBillingTaxId(),
                 order.getBillingStreet(),
                 order.getBillingCity(),
+                order.getBillingPostalCode(),
                 order.getBillingCountry(),
                 order.getShippingStreet(),
                 order.getShippingCity(),

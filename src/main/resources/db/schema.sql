@@ -53,6 +53,7 @@ CREATE TABLE customer_order (
   billing_tax_id VARCHAR(100),
   billing_street VARCHAR(255),
   billing_city VARCHAR(100),
+  billing_postal_code VARCHAR(20),
   billing_country VARCHAR(100),
   shipping_street VARCHAR(255),
   shipping_city VARCHAR(100),

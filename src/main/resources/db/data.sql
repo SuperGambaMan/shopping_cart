@@ -18,10 +18,10 @@ INSERT INTO coupon (code, description, discount_type, discount_value, active, va
 
 -- Orders (customer_order)
 -- Note: gross_total is the sum of order_items.line_total; discount_total and final_total computed accordingly.
-INSERT INTO customer_order (order_number, created_at, status, gross_total, discount_total, final_total, payment_method, payment_status, payment_details, billing_name, billing_tax_id, billing_street, billing_city, billing_country, shipping_street, shipping_city, shipping_postal_code, shipping_country, coupon_id) VALUES
-('ORD-1001', NOW() - INTERVAL 5 DAY, 'COMPLETED', 113.99, 11.40, 102.59, 'CREDIT_CARD', 'PAID', 'Visa **** 4242', 'Alice Smith', 'B12345678', 'Calle Falsa 123', 'Madrid', 'Spain', 'Calle Falsa 123', 'Madrid', '28001', 'Spain', 1),
-('ORD-1002', NOW() - INTERVAL 2 DAY, 'PROCESSING', 49.00, 0.00, 49.00, 'PAYPAL', 'PENDING', 'paypal_tx_987', 'Bob Johnson', 'C98765432', 'Avenida Siempreviva 5', 'Valencia', 'Spain', 'Avenida Siempreviva 5', 'Valencia', '46001', 'Spain', NULL),
-('ORD-1003', NOW() - INTERVAL 1 DAY, 'COMPLETED', 207.24, 5.00, 202.24, 'CREDIT_CARD', 'PAID', 'Mastercard **** 1111', 'Charlie Brown', 'D19283746', 'Plaza Mayor 1', 'Sevilla', 'Spain', 'Plaza Mayor 1', 'Sevilla', '41001', 'Spain', 2);
+INSERT INTO customer_order (order_number, created_at, status, gross_total, discount_total, final_total, payment_method, payment_status, payment_details, billing_name, billing_tax_id, billing_street, billing_city, billing_postal_code, billing_country, shipping_street, shipping_city, shipping_postal_code, shipping_country, coupon_id) VALUES
+('ORD-1001', NOW() - INTERVAL 5 DAY, 'COMPLETED', 113.99, 11.40, 102.59, 'CREDIT_CARD', 'PAID', 'Visa **** 4242', 'Alice Smith', 'B12345678', 'Calle Falsa 123', 'Madrid', '28001', 'Spain', 'Calle Falsa 123', 'Madrid', '28001', 'Spain', 1),
+('ORD-1002', NOW() - INTERVAL 2 DAY, 'PROCESSING', 49.00, 0.00, 49.00, 'PAYPAL', 'PENDING', 'paypal_tx_987', 'Bob Johnson', 'C98765432', 'Avenida Siempreviva 5', 'Valencia', '46001', 'Spain', 'Avenida Siempreviva 5', 'Valencia', '46001', 'Spain', NULL),
+('ORD-1003', NOW() - INTERVAL 1 DAY, 'COMPLETED', 207.24, 5.00, 202.24, 'CREDIT_CARD', 'PAID', 'Mastercard **** 1111', 'Charlie Brown', 'D19283746', 'Plaza Mayor 1', 'Sevilla', '41001', 'Spain', 'Plaza Mayor 1', 'Sevilla', '41001', 'Spain', 2);
 
 -- Order items
 -- For ORD-1001 (id 1)

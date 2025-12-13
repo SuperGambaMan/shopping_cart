@@ -138,9 +138,8 @@ public class CartController {
             return "redirect:/cart";
         }
         Long orderId = orderService.createOrderFromCart(cart);
-        // Limpiar carrito
-        cart.getItems().clear();
-        cart.clearCoupon();
+        // NO limpiamos el carrito aquí - se mantendrá hasta que se complete el pago
+        // Así el usuario puede volver atrás y ver sus productos
         // Redirigimos al paso 2 pasando el id de la orden para completar facturación/envío
         return "redirect:/checkout/step2?orderId=" + orderId;
     }
