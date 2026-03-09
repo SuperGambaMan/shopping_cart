@@ -1,38 +1,40 @@
 # 🛒 Shopping Cart Application
 
-Una aplicación web de carrito de compras completa desarrollada con **Spring Boot 4.0** y **Thymeleaf**, que implementa un flujo completo de compra en tres pasos: gestión del carrito, checkout con información de facturación/envío, y procesamiento de pagos.
+[English](README.md) | [Español](README.es.md)
 
-## 📋 Tabla de Contenidos
+A complete shopping cart web application built with **Spring Boot 4.0** and **Thymeleaf**, implementing a full three-step purchase flow: cart management, checkout with billing/shipping information, and payment processing.
 
-- [Características](#-características)
-- [Tecnologías Utilizadas](#-tecnologías-utilizadas)
-- [Requisitos Previos](#-requisitos-previos)
-- [Instalación y Configuración](#-instalación-y-configuración)
-- [Estructura del Proyecto](#-estructura-del-proyecto)
-- [Base de Datos](#-base-de-datos)
-- [Funcionalidades Principales](#-funcionalidades-principales)
-- [Endpoints de la Aplicación](#-endpoints-de-la-aplicación)
-- [Flujo de Compra](#-flujo-de-compra)
-- [Uso de la Aplicación](#-uso-de-la-aplicación)
-- [Configuración](#-configuración)
-- [Ejecución](#-ejecución)
+## 📋 Table of Contents
 
-## ✨ Características
+- [Features](#-features)
+- [Technologies Used](#-technologies-used)
+- [Prerequisites](#-prerequisites)
+- [Installation and Setup](#-installation-and-setup)
+- [Project Structure](#-project-structure)
+- [Database](#-database)
+- [Main Functionalities](#-main-functionalities)
+- [Application Endpoints](#-application-endpoints)
+- [Purchase Flow](#-purchase-flow)
+- [How to Use the Application](#-how-to-use-the-application)
+- [Configuration](#-configuration)
+- [Run](#-run)
 
-- ✅ **Catálogo de productos** con gestión de inventario
-- ✅ **Carrito de compras en sesión** persistente durante la navegación
-- ✅ **Sistema de cupones de descuento** (porcentaje o cantidad fija)
-- ✅ **Proceso de checkout en 3 pasos** (Wizard):
-1. Gestión del carrito
-2. Información de facturación y envío
-3. Procesamiento de pago
-- ✅ **Múltiples métodos de pago** (tarjeta de crédito, PayPal, transferencia bancaria)
-- ✅ **Validación de datos** con Jakarta Bean Validation
-- ✅ **Gestión de órdenes** con historial completo
-- ✅ **Interfaz responsive** con Bootstrap 5
-- ✅ **Persistencia con MySQL** usando JDBC
+## ✨ Features
 
-## 🚀 Tecnologías Utilizadas
+- ✅ **Product catalog** with inventory management
+- ✅ **Session-based shopping cart** persistent during navigation
+- ✅ **Discount coupon system** (percentage or fixed amount)
+- ✅ **3-step checkout process** (Wizard):
+1. Cart management
+2. Billing and shipping information
+3. Payment processing
+- ✅ **Multiple payment methods** (credit card, PayPal, bank transfer)
+- ✅ **Data validation** with Jakarta Bean Validation
+- ✅ **Order management** with full history
+- ✅ **Responsive interface** with Bootstrap 5
+- ✅ **MySQL persistence** using JDBC
+
+## 🚀 Technologies Used
 
 ### Backend
 - **Java 25**
@@ -41,324 +43,324 @@ Una aplicación web de carrito de compras completa desarrollada con **Spring Boo
   - Spring JDBC
   - Spring Validation
   - Spring DevTools
-- **Lombok** - Reducción de código boilerplate
-- **Thymeleaf** - Motor de plantillas para vistas
+- **Lombok** - Reduces boilerplate code
+- **Thymeleaf** - Template engine for views
 
 ### Frontend
-- **Bootstrap 5.3.2** - Framework CSS
+- **Bootstrap 5.3.2** - CSS framework
 - **HTML5 / CSS3**
 - **Thymeleaf Templates**
 
-### Base de Datos
+### Database
 - **MySQL 8.x**
 - **MySQL Connector/J**
 
-### Herramientas de Build
-- **Maven** - Gestión de dependencias y construcción
+### Build Tools
+- **Maven** - Dependency management and build automation
 
-## 📦 Requisitos Previos
+## 📦 Prerequisites
 
-Antes de ejecutar el proyecto, asegúrate de tener instalado:
+Before running the project, make sure you have installed:
 
-- **JDK 25** o superior
-- **MySQL 8.x** o superior
-- **Maven 3.6+** (o usa el wrapper incluido `mvnw`)
-- **Git** (opcional, para clonar el repositorio)
+- **JDK 25** or higher
+- **MySQL 8.x** or higher
+- **Maven 3.6+** (or use the included `mvnw` wrapper)
+- **Git** (optional, to clone the repository)
 
-## 🔧 Instalación y Configuración
+## 🔧 Installation and Setup
 
-### 1. Clonar el Repositorio
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/SuperGambaMan/shopping_cart
 cd shopping_cart
 ```
 
-### 2. Configurar la Base de Datos
+### 2. Configure the Database
 
-Crea una base de datos MySQL:
+Create a MySQL database:
 
 ```sql
 CREATE DATABASE shopping_cart CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-### 3. Configurar Credenciales
+### 3. Configure Credentials
 
-Edita el archivo `src/main/resources/application.properties`:
+Edit the file `src/main/resources/application.properties`:
 
 ```properties
 spring.application.name=shopping_chart
 
 spring.datasource.url=jdbc:mysql://localhost:3306/shopping_cart
-spring.datasource.username=<tu_usuario>
-spring.datasource.password=<tu_contraseña>
+spring.datasource.username=<your_username>
+spring.datasource.password=<your_password>
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 ```
 
-> ⚠️ **Importante**: Actualiza `username` y `password` con tus credenciales de MySQL.
+> ⚠️ **Important**: Update `username` and `password` with your MySQL credentials.
 
-### 4. Inicializar el Schema y Datos
+### 4. Initialize Schema and Data
 
-Ejecuta los scripts SQL ubicados en `src/main/resources/db/`:
+Run the SQL scripts located in `src/main/resources/db/`:
 
 ```bash
 mysql -u root -p shopping_cart < src/main/resources/db/schema.sql
 mysql -u root -p shopping_cart < src/main/resources/db/data.sql
 ```
 
-O ejecuta manualmente los scripts desde tu cliente MySQL favorito.
+Or run the scripts manually from your preferred MySQL client.
 
-## 📁 Estructura del Proyecto
+## 📁 Project Structure
 
 ```
 shopping_cart/
 ├── src/
 │   ├── main/
 │   │   ├── java/org/iesvdm/shopping_cart/
-│   │   │   ├── ShoppingChartApplication.java      # Clase principal
+│   │   │   ├── ShoppingChartApplication.java      # Main class
 │   │   │   ├── controller/
-│   │   │   │   ├── CartController.java            # Gestión del carrito
-│   │   │   │   └── CheckoutController.java        # Proceso de checkout
+│   │   │   │   ├── CartController.java            # Cart management
+│   │   │   │   └── CheckoutController.java        # Checkout flow
 │   │   │   ├── dto/
-│   │   │   │   ├── PaymentDTO.java                # DTO para pagos
-│   │   │   │   └── ProductAddDTO.java             # DTO para añadir productos
+│   │   │   │   ├── PaymentDTO.java                # DTO for payments
+│   │   │   │   └── ProductAddDTO.java             # DTO to add products
 │   │   │   ├── model/
-│   │   │   │   ├── Cart.java                      # Carrito de compras
-│   │   │   │   ├── CartItem.java                  # Ítem del carrito
-│   │   │   │   ├── Coupon.java                    # Cupón de descuento
-│   │   │   │   ├── CustomerOrder.java             # Orden del cliente
-│   │   │   │   ├── OrderItem.java                 # Ítem de la orden
-│   │   │   │   └── Product.java                   # Producto
+│   │   │   │   ├── Cart.java                      # Shopping cart
+│   │   │   │   ├── CartItem.java                  # Cart item
+│   │   │   │   ├── Coupon.java                    # Discount coupon
+│   │   │   │   ├── CustomerOrder.java             # Customer order
+│   │   │   │   ├── OrderItem.java                 # Order item
+│   │   │   │   └── Product.java                   # Product
 │   │   │   ├── repository/
-│   │   │   │   ├── CouponRepository.java          # Acceso a datos de cupones
-│   │   │   │   ├── OrderRepository.java           # Acceso a datos de órdenes
-│   │   │   │   └── ProductRepository.java         # Acceso a datos de productos
+│   │   │   │   ├── CouponRepository.java          # Coupon data access
+│   │   │   │   ├── OrderRepository.java           # Order data access
+│   │   │   │   └── ProductRepository.java         # Product data access
 │   │   │   └── service/
-│   │   │       ├── CouponService.java             # Lógica de negocio de cupones
-│   │   │       ├── OrderService.java              # Lógica de negocio de órdenes
-│   │   │       └── ProductService.java            # Lógica de negocio de productos
+│   │   │       ├── CouponService.java             # Coupon business logic
+│   │   │       ├── OrderService.java              # Order business logic
+│   │   │       └── ProductService.java            # Product business logic
 │   │   └── resources/
-│   │       ├── application.properties              # Configuración de la aplicación
+│   │       ├── application.properties              # Application configuration
 │   │       ├── db/
-│   │       │   ├── schema.sql                     # Esquema de la base de datos
-│   │       │   └── data.sql                       # Datos de prueba
+│   │       │   ├── schema.sql                     # Database schema
+│   │       │   └── data.sql                       # Sample data
 │   │       ├── static/css/
-│   │       │   └── styles.css                     # Estilos personalizados
+│   │       │   └── styles.css                     # Custom styles
 │   │       └── templates/
-│   │           ├── cart.html                      # Paso 1: Carrito
-│   │           ├── checkout_step2.html            # Paso 2: Dirección
-│   │           ├── checkout_step3.html            # Paso 3: Pago
-│   │           └── order_confirmation.html        # Confirmación
+│   │           ├── cart.html                      # Step 1: Cart
+│   │           ├── checkout_step2.html            # Step 2: Address
+│   │           ├── checkout_step3.html            # Step 3: Payment
+│   │           └── order_confirmation.html        # Confirmation
 │   └── test/
 │       └── java/org/iesvdm/shopping_cart/
 │           └── ShoppingChartApplicationTests.java
-├── pom.xml                                        # Configuración de Maven
+├── pom.xml                                        # Maven configuration
 ├── mvnw                                           # Maven Wrapper (Unix)
 └── mvnw.cmd                                       # Maven Wrapper (Windows)
 ```
 
-## 🗄️ Base de Datos
+## 🗄️ Database
 
-### Esquema de Tablas
+### Table Schema
 
-La aplicación utiliza 4 tablas principales:
+The application uses 4 main tables:
 
-#### 1. **product** - Catálogo de productos
-- `id` (PK): Identificador único
-- `name`: Nombre del producto
-- `description`: Descripción detallada
-- `price`: Precio unitario (DECIMAL)
-- `active`: Estado del producto (activo/inactivo)
-- `created_at`: Fecha de creación
+#### 1. **product** - Product catalog
+- `id` (PK): Unique identifier
+- `name`: Product name
+- `description`: Detailed description
+- `price`: Unit price (DECIMAL)
+- `active`: Product status (active/inactive)
+- `created_at`: Creation date
 
-#### 2. **coupon** - Cupones de descuento
-- `id` (PK): Identificador único
-- `code`: Código del cupón (único)
-- `description`: Descripción del cupón
-- `discount_type`: Tipo de descuento (PERCENT/AMOUNT)
-- `discount_value`: Valor del descuento
-- `active`: Estado del cupón
-- `valid_from` / `valid_to`: Periodo de validez
+#### 2. **coupon** - Discount coupons
+- `id` (PK): Unique identifier
+- `code`: Coupon code (unique)
+- `description`: Coupon description
+- `discount_type`: Discount type (PERCENT/AMOUNT)
+- `discount_value`: Discount value
+- `active`: Coupon status
+- `valid_from` / `valid_to`: Validity period
 
-#### 3. **customer_order** - Órdenes de compra
-- `id` (PK): Identificador único
-- `order_number`: Número de orden (único)
-- `status`: Estado de la orden
-- `gross_total`, `discount_total`, `final_total`: Totales
-- `payment_method`, `payment_status`, `payment_details`: Info de pago
-- `billing_*` / `shipping_*`: Direcciones de facturación y envío
-- `coupon_id` (FK): Cupón aplicado
+#### 3. **customer_order** - Purchase orders
+- `id` (PK): Unique identifier
+- `order_number`: Order number (unique)
+- `status`: Order status
+- `gross_total`, `discount_total`, `final_total`: Totals
+- `payment_method`, `payment_status`, `payment_details`: Payment info
+- `billing_*` / `shipping_*`: Billing and shipping addresses
+- `coupon_id` (FK): Applied coupon
 
-#### 4. **order_item** - Items de las órdenes
-- `id` (PK): Identificador único
-- `order_id` (FK): Referencia a la orden
-- `product_id` (FK): Referencia al producto
-- `product_name`: Nombre del producto (snapshot)
-- `unit_price`: Precio unitario (snapshot)
-- `quantity`: Cantidad
-- `line_total`: Total de la línea
+#### 4. **order_item** - Order items
+- `id` (PK): Unique identifier
+- `order_id` (FK): Reference to the order
+- `product_id` (FK): Reference to the product
+- `product_name`: Product name (snapshot)
+- `unit_price`: Unit price (snapshot)
+- `quantity`: Quantity
+- `line_total`: Line total
 
-### Datos de Prueba
+### Sample Data
 
-El archivo `data.sql` incluye:
-- **5 productos** de ejemplo (ratón, teclado, cable USB, silla gaming, webcam)
-- **2 cupones** activos:
-  - `WELCOME10`: 10% de descuento
-  - `FIVEOFF`: 5€ de descuento
-- **3 órdenes** de ejemplo con sus ítems correspondientes
+The `data.sql` file includes:
+- **5 sample products** (mouse, keyboard, USB cable, gaming chair, webcam)
+- **2 active coupons**:
+  - `WELCOME10`: 10% discount
+  - `FIVEOFF`: 5 EUR discount
+- **3 sample orders** with their corresponding items
 
-## 🎯 Funcionalidades Principales
+## 🎯 Main Functionalities
 
-### 🛍️ Gestión del Carrito
+### 🛍️ Cart Management
 
-- **Añadir productos** desde el catálogo con cantidad personalizada
-- **Incrementar/decrementar** cantidad de productos
-- **Eliminar** productos del carrito
-- **Aplicar cupones** de descuento con validación
-- **Cálculo automático** de subtotales, descuentos y total final
-- **Persistencia en sesión** del carrito durante la navegación
+- **Add products** from the catalog with custom quantity
+- **Increase/decrease** product quantities
+- **Remove** products from the cart
+- **Apply discount coupons** with validation
+- **Automatic calculation** of subtotals, discounts, and final total
+- **Session persistence** of the cart during navigation
 
-### 💳 Proceso de Checkout
+### 💳 Checkout Process
 
-#### **Paso 1: Revisión del Carrito**
-- Visualización de todos los productos
-- Modificación de cantidades
-- Aplicación/eliminación de cupones
-- Validación de carrito no vacío
+#### **Step 1: Cart Review**
+- Display all products
+- Modify quantities
+- Apply/remove coupons
+- Validate non-empty cart
 
-#### **Paso 2: Información de Facturación y Envío**
-- Formulario de datos de facturación
-- Formulario de dirección de envío
-- Opción "misma dirección para envío"
-- Validación de campos obligatorios
+#### **Step 2: Billing and Shipping Information**
+- Billing information form
+- Shipping address form
+- "Same address for shipping" option
+- Required field validation
 
-#### **Paso 3: Procesamiento de Pago**
-- Selección de método de pago:
-  - 💳 Tarjeta de crédito (con validación de número, expiración y CVV)
-  - 🅿️ PayPal (con email de cuenta)
-  - 🏦 Transferencia bancaria (con IBAN)
-- Validación condicional según método seleccionado
-- Confirmación final de la orden
+#### **Step 3: Payment Processing**
+- Payment method selection:
+  - 💳 Credit card (with card number, expiration, and CVV validation)
+  - 🅿️ PayPal (with account email)
+  - 🏦 Bank transfer (with IBAN)
+- Conditional validation based on selected method
+- Final order confirmation
 
-### 📦 Gestión de Órdenes
+### 📦 Order Management
 
-- Creación automática de órdenes desde el carrito
-- Guardado de snapshot de productos (precio y nombre)
-- Tracking de estado de pago
-- Generación de número de orden único
-- Almacenamiento completo de información de facturación y envío
+- Automatic order creation from the cart
+- Product snapshot storage (name and price)
+- Payment status tracking
+- Unique order number generation
+- Full billing and shipping data storage
 
-## 🌐 Endpoints de la Aplicación
+## 🌐 Application Endpoints
 
-### Controlador de Carrito (`CartController`)
+### Cart Controller (`CartController`)
 
-| Método | Endpoint | Descripción |
+| Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/cart` | Mostrar el carrito de compras |
-| POST | `/cart/addproduct` | Añadir producto al carrito |
-| POST | `/cart/inc/{id}` | Incrementar cantidad de un producto |
-| POST | `/cart/dec/{id}` | Decrementar cantidad de un producto |
-| POST | `/cart/remove/{id}` | Eliminar producto del carrito |
-| POST | `/cart/applycoupon` | Aplicar cupón de descuento |
-| POST | `/cart/checkout` | Iniciar proceso de checkout |
+| GET | `/cart` | Show shopping cart |
+| POST | `/cart/addproduct` | Add product to cart |
+| POST | `/cart/inc/{id}` | Increase product quantity |
+| POST | `/cart/dec/{id}` | Decrease product quantity |
+| POST | `/cart/remove/{id}` | Remove product from cart |
+| POST | `/cart/applycoupon` | Apply discount coupon |
+| POST | `/cart/checkout` | Start checkout process |
 
-### Controlador de Checkout (`CheckoutController`)
+### Checkout Controller (`CheckoutController`)
 
-| Método | Endpoint | Descripción |
+| Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/checkout/step2` | Formulario de dirección (Paso 2) |
-| POST | `/checkout/step2` | Procesar dirección de facturación/envío |
-| GET | `/checkout/step3` | Formulario de pago (Paso 3) |
-| POST | `/checkout/step3` | Procesar pago y finalizar orden |
-| GET | `/order/confirmation/{id}` | Página de confirmación de orden |
+| GET | `/checkout/step2` | Address form (Step 2) |
+| POST | `/checkout/step2` | Process billing/shipping address |
+| GET | `/checkout/step3` | Payment form (Step 3) |
+| POST | `/checkout/step3` | Process payment and complete order |
+| GET | `/order/confirmation/{id}` | Order confirmation page |
 
-## 🔄 Flujo de Compra
+## 🔄 Purchase Flow
 
 ```
 ┌─────────────────┐
-│  Añadir         │
-│  Productos      │
-│  al Carrito     │
+│  Add            │
+│  Products       │
+│  to Cart        │
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│  PASO 1         │
-│  Carrito        │
-│  - Modificar    │
-│  - Cupones      │
+│  STEP 1         │
+│  Cart           │
+│  - Modify       │
+│  - Coupons      │
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│  PASO 2         │
-│  Facturación    │
-│  y Envío        │
+│  STEP 2         │
+│  Billing        │
+│  and Shipping   │
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│  PASO 3         │
-│  Pago           │
-│  - Tarjeta      │
+│  STEP 3         │
+│  Payment        │
+│  - Card         │
 │  - PayPal       │
-│  - Transferencia│
+│  - Transfer     │
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│  Confirmación   │
-│  de Orden       │
+│  Order          │
+│  Confirmation   │
 └─────────────────┘
 ```
 
-## 💻 Uso de la Aplicación
+## 💻 How to Use the Application
 
-### 1. Explorar el Catálogo
-Accede a `/cart` para ver los productos disponibles y tu carrito actual.
+### 1. Browse the Catalog
+Go to `/cart` to see available products and your current cart.
 
-### 2. Añadir Productos
-Selecciona un producto del dropdown, especifica la cantidad y haz clic en "Add to cart".
+### 2. Add Products
+Select a product from the dropdown, set the quantity, and click "Add to cart".
 
-### 3. Gestionar el Carrito
-- Usa los botones **+** y **-** para ajustar cantidades
-- Haz clic en **Remove** para eliminar productos
-- Introduce un código de cupón en el campo correspondiente y aplícalo
+### 3. Manage the Cart
+- Use the **+** and **-** buttons to adjust quantities
+- Click **Remove** to delete products
+- Enter a coupon code in the corresponding field and apply it
 
-### 4. Proceder al Checkout
-Haz clic en **Checkout** cuando estés listo para comprar.
+### 4. Proceed to Checkout
+Click **Checkout** when you are ready to buy.
 
-### 5. Completar Información
-- **Paso 2**: Rellena tus datos de facturación y envío
-- **Paso 3**: Selecciona método de pago y completa los detalles
+### 5. Complete Information
+- **Step 2**: Fill in your billing and shipping details
+- **Step 3**: Select a payment method and complete the details
 
-### 6. Confirmación
-Recibirás una página de confirmación con los detalles de tu orden.
+### 6. Confirmation
+You will receive a confirmation page with your order details.
 
-## ⚙️ Configuración
+## ⚙️ Configuration
 
-### Variables de Entorno (Opcional)
+### Environment Variables (Optional)
 
-Puedes configurar las siguientes variables de entorno en lugar de modificar `application.properties`:
+You can configure the following environment variables instead of editing `application.properties`:
 
 ```bash
-# Base de datos
+# Database
 export SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/shopping_cart
-export SPRING_DATASOURCE_USERNAME=tu_usuario
-export SPRING_DATASOURCE_PASSWORD=tu_contraseña
+export SPRING_DATASOURCE_USERNAME=your_username
+export SPRING_DATASOURCE_PASSWORD=your_password
 ```
 
-### Configuración Avanzada
+### Advanced Configuration
 
-El archivo `application.properties` admite configuraciones adicionales de Spring Boot como:
-- Nivel de logging
-- Puerto del servidor
-- Configuración de pool de conexiones
+The `application.properties` file supports additional Spring Boot settings such as:
+- Logging level
+- Server port
+- Connection pool settings
 - Etc.
 
-## 🚀 Ejecución
+## 🚀 Run
 
-### Usando Maven Wrapper (Recomendado)
+### Using Maven Wrapper (Recommended)
 
 **Windows:**
 ```bash
@@ -370,22 +372,22 @@ El archivo `application.properties` admite configuraciones adicionales de Spring
 ./mvnw spring-boot:run
 ```
 
-### Usando Maven Instalado
+### Using Installed Maven
 
 ```bash
 mvn spring-boot:run
 ```
 
-### Compilar y Ejecutar JAR
+### Build and Run JAR
 
 ```bash
 mvn clean package
 java -jar target/shopping_chart-0.0.1-SNAPSHOT.jar
 ```
 
-### Acceder a la Aplicación
+### Access the Application
 
-Una vez iniciada, abre tu navegador en:
+Once started, open your browser at:
 
 ```
 http://localhost:8080/cart
@@ -393,46 +395,45 @@ http://localhost:8080/cart
 
 ## 🧪 Testing
 
-Ejecutar los tests:
+Run the tests:
 
 ```bash
 mvnw test
 ```
 
-## 📝 Notas Importantes
+## 📝 Important Notes
 
-- **Carrito en Sesión**: El carrito se mantiene en la sesión HTTP mediante `@SessionAttributes("cart")`. Se limpia al cerrar el navegador o expirar la sesión.
+- **Session Cart**: The cart is kept in the HTTP session with `@SessionAttributes("cart")`. It is cleared when the browser is closed or the session expires.
 
-- **Validación Condicional**: Los formularios implementan validación condicional según el contexto (ej: campos de tarjeta solo se validan si se selecciona pago con tarjeta).
+- **Conditional Validation**: Forms implement conditional validation based on context (e.g., card fields are only validated when card payment is selected).
 
-- **Snapshots de Productos**: Los precios y nombres de productos se guardan en `order_item` para mantener histórico, incluso si el producto cambia posteriormente.
+- **Product Snapshots**: Product names and prices are saved in `order_item` to preserve historical data, even if products change later.
 
-- **Cupones**: La validación de cupones verifica:
-  - Existencia del código
-  - Estado activo
-  - Vigencia (fecha válida)
+- **Coupons**: Coupon validation checks:
+  - Code existence
+  - Active status
+  - Validity period (valid date)
 
-## 🤝 Contribuciones
+## 🤝 Contributing
 
-Las contribuciones son bienvenidas. Por favor:
+Contributions are welcome. Please:
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+1. Fork the project
+2. Create a branch for your feature (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 📄 Licencia
+## 📄 License
 
-Este proyecto es un ejercicio educativo desarrollado para IES Vega de Mijas.
+This project is an educational exercise developed for IES Vega de Mijas.
 
-## 👥 Autores
+## 👥 Authors
 
-Desarrollado como proyecto educativo de Spring Boot y aplicaciones web empresariales.
+Developed as an educational project for Spring Boot and enterprise web applications.
 
-Por Marcos Bernal.
+By Marcos Bernal.
 
 ---
 
-⭐ Si este proyecto te ha sido útil, considera darle una estrella en GitHub!
-
+⭐ If this project was useful to you, consider giving it a star on GitHub!
